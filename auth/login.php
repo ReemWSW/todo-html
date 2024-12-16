@@ -1,18 +1,22 @@
 <?php
-require 'db.php';
+session_start();
+require '../db.php';
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $name = $_POST['name'];
     $email = $_POST['email'];
-    $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
+    $password = $_POST['password'];
 
-    try {
-        $stmt = $conn->prepare("INSERT INTO users (name, email, password) VALUES (?, ?, ?)");
-        $stmt->execute([$name, $email, $password]);
-        header("Location: login.php");
+    $stmt = $conn->prepare("SELECT * FROM users WHERE email = ?");
+    $stmt->execute([$email]);
+    $user = $stmt->fetch();
+
+    if ($user && password_verify($password, $user['password'])) {
+        $_SESSION['user_id'] = $user['id'];
+        $_SESSION['name'] = $user['name'];
+        header("Location: ../index.php");
         exit();
-    } catch (PDOException $e) {
-        $error = "Registration failed. Email already exists.";
+    } else {
+        $error = "Invalid email or password!";
     }
 }
 ?>
@@ -20,19 +24,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <link rel="stylesheet" href="./css/style.css">
-    <title>Register</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <title>Login</title>
 </head>
 <body>
     <div class="login-container">
         <div class="login-card">
-            <h2>Register</h2>
+            <h2>Login</h2>
             <?php if (isset($error)) echo "<p style='color: red;'>$error</p>"; ?>
             <form method="POST" action="">
-                <div class="input-group">
-                    <label for="name">Name</label>
-                    <input type="text" id="name" name="name" placeholder="Enter your name" required>
-                </div>
                 <div class="input-group">
                     <label for="email">Email</label>
                     <input type="email" id="email" name="email" placeholder="Enter your email" required>
@@ -41,9 +41,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     <label for="password">Password</label>
                     <input type="password" id="password" name="password" placeholder="Enter your password" required>
                 </div>
-                <button type="submit" class="login-btn">Register</button>
+                <button type="submit" class="login-btn">Login</button>
                 <div class="links">
-                    <a href="login.php">Already have an account? Login</a>
+                    <a href="register.php">Don't have an account? Sign Up</a>
                 </div>
             </form>
         </div>
