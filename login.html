@@ -1,31 +1,40 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login Form</title>
-    <link rel="stylesheet" href="css/login.css">
+    <title>Login</title>
+
+    <link rel="stylesheet" href="./css/style.css">
+
 </head>
+
 <body>
     <div class="login-container">
-        <div class="login-title">
+        <div class="login-card">
             <h2>Login</h2>
-            <p>Hello! Let's get started</p>
-        </div>
-        <div class="login-box">
             <form>
-                <div class="input-container">
-                    <label for="username">Username</label>
-                    <input type="text" placeholder="Username" required>
+                <!-- Email Input -->
+                <div class="input-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" placeholder="Enter your email" required>
                 </div>
-                <div class="input-container">
+                <!-- Password Input -->
+                <div class="input-group">
                     <label for="password">Password</label>
-                    <input type="password" placeholder="Password" required>
+                    <input type="password" id="password" placeholder="Enter your password" required>
                 </div>
-                <button type="submit">Login</button>
+
+                <!-- Login Button -->
+                <button type="submit" class="login-btn">Login</button>
+                <!-- Links -->
+                <div class="links">
+                    <a href="register.html">Sign Up</a>
+                </div>
             </form>
-            <a href="#" class="forgot-password">Forgot password?</a>
         </div>
     </div>
 </body>
+
 </html>
